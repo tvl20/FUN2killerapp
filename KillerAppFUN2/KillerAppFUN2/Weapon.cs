@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace KillerAppFUN2
 {
-    class Weapon
+    public class Weapon
     {
     }
 }
