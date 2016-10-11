@@ -25,6 +25,7 @@ namespace KillerAppFUN2
             {
                 lb_Players.Items.Add(name);
             }
+            lb_Players.SelectedIndex = 0;
         }
 
         private void updateStats(Player p)
@@ -62,7 +63,26 @@ namespace KillerAppFUN2
                     //seperated so its easier to read
                     DC.addPlayer(new Player(new Point(0, 0), tb_PlayerName.Text, Convert.ToInt32(nm_Lvl.Value), Convert.ToInt32(nm_Defence.Value), 
                         Convert.ToInt32(nm_MaxHP.Value), Convert.ToInt32(nm_HP.Value), Entity.Direction.South, new Weapon(7, 1, 1), 0));
+                    
+                    makingNewPlayer = false;
+
+                    tb_PlayerName.ReadOnly = true;
+                    nm_HP.ReadOnly = true;
+                    nm_Defence.ReadOnly = true;
+                    nm_Lvl.ReadOnly = true;
+                    nm_MaxHP.ReadOnly = true;
+                    
+
+                    lb_WeaponName.Visible = true;
+                    lb_WeaponDMG.Visible = true;
+                    lb_WeaponCRT.Visible = true;
+                    tb_WeaponName.Visible = true;
+                    nm_WeaponDMG.Visible = true;
+                    nm_WeaponCrit.Visible = true;
+
+                    bt_AddNewPlayer.Text = "New player";
                     updateList();
+                    updateStats(DC.getPlayer(lb_Players.SelectedItem.ToString()));
                 }
             }
             else

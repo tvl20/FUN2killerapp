@@ -286,7 +286,7 @@
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(139, 48);
             this.button1.TabIndex = 19;
-            this.button1.Text = "Edit Selected Player";
+            this.button1.Text = "Edit selected player";
             this.button1.UseVisualStyleBackColor = true;
             // 
             // Form1
