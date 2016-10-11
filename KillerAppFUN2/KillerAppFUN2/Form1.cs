@@ -55,7 +55,11 @@ namespace KillerAppFUN2
                 {
                     MessageBox.Show("Current HP can't be higher then max HP.");
                 }
-                else if(DC.playerNameTaken(tb_PlayerName.Text) == true)
+                else if (tb_PlayerName.Text.Length < 3)
+                {
+                    MessageBox.Show("Name must be at least 4 characters long");
+                }
+                else if (DC.playerNameTaken(tb_PlayerName.Text) == true)
                 {
                     MessageBox.Show("Name is already taken.");
                 }
@@ -265,7 +269,8 @@ namespace KillerAppFUN2
 
         private void bt_DeletePlayer_Click(object sender, EventArgs e)
         {
-            
+            DC.deletePlayer(lb_Players.SelectedItem.ToString());
+            updateList();
         }
     }
 }

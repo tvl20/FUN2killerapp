@@ -115,6 +115,15 @@ namespace KillerAppFUN2.DAL
             connection.Close();
         }
 
+        public void deletePlayer(string name)
+        {
+            query = "DELETE FROM Players WHERE PlayerName='" + name + "';";
+            connection.Open();
+            SqlCommand cmd = new SqlCommand(query, connection);
+            cmd.ExecuteNonQuery();
+            connection.Close();
+        }
+
         public Weapon getWeapon(string name)
         {
             query = "SELECT WeaponID, WeaponDMG, WeaponCRT, WeaponType FROM Weapons WHERE WeaponName='"+name+"';";
