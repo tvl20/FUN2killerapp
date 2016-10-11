@@ -15,6 +15,7 @@ namespace KillerAppFUN2
     {
         private bool makingNewPlayer = false;
         private bool editingPlayer = false;
+        private int editingPlayerRoom;
         private DataBaseControl DC = new DataBaseControl();
 
         private void updateList()
@@ -62,7 +63,7 @@ namespace KillerAppFUN2
                 {
                     //seperated so its easier to read
                     DC.addPlayer(new Player(new Point(0, 0), tb_PlayerName.Text, Convert.ToInt32(nm_Lvl.Value), Convert.ToInt32(nm_Defence.Value), 
-                        Convert.ToInt32(nm_MaxHP.Value), Convert.ToInt32(nm_HP.Value), Entity.Direction.South, new Weapon(7, 1, 1), 0));
+                        Convert.ToInt32(nm_MaxHP.Value), Convert.ToInt32(nm_HP.Value), Entity.Direction.South, DC.getWeapon("Broken Blade"), 2));
                     
                     makingNewPlayer = false;
 
@@ -71,7 +72,6 @@ namespace KillerAppFUN2
                     nm_Defence.ReadOnly = true;
                     nm_Lvl.ReadOnly = true;
                     nm_MaxHP.ReadOnly = true;
-                    
 
                     lb_WeaponName.Visible = true;
                     lb_WeaponDMG.Visible = true;
@@ -81,6 +81,10 @@ namespace KillerAppFUN2
                     nm_WeaponCrit.Visible = true;
 
                     bt_AddNewPlayer.Text = "New player";
+                    bt_Continue.Visible = true;
+                    bt_EditPlayer.Visible = true;
+                    bt_Cancel.Visible = false;
+                    bt_DeletePlayer.Visible = true;
                     updateList();
                     updateStats(DC.getPlayer(lb_Players.SelectedItem.ToString()));
                 }
@@ -90,6 +94,11 @@ namespace KillerAppFUN2
                 makingNewPlayer = true;
 
                 bt_AddNewPlayer.Text = "Confirm";
+                bt_Continue.Visible = false;
+                bt_EditPlayer.Visible = false;
+                bt_Cancel.Visible = true;
+                bt_DeletePlayer.Visible = false;
+
                 tb_PlayerName.Text = "";
                 tb_PlayerName.ReadOnly = false;
                 nm_HP.Value = 1;
@@ -108,6 +117,155 @@ namespace KillerAppFUN2
                 nm_WeaponDMG.Visible = false;
                 nm_WeaponCrit.Visible = false;
             }
+        }
+
+        private void bt_EditPlayer_Click(object sender, EventArgs e)
+        {
+            if (editingPlayer)
+            {
+                if (nm_HP.Value > nm_MaxHP.Value)
+                {
+                    MessageBox.Show("Current HP can't be higher then max HP.");
+                }
+                else
+                {
+                    DC.updatePlayer(new Player(new Point(0, 0), tb_PlayerName.Text, Convert.ToInt32(nm_Lvl.Value), Convert.ToInt32(nm_Defence.Value),
+                        Convert.ToInt32(nm_MaxHP.Value), Convert.ToInt32(nm_HP.Value), Entity.Direction.South, DC.getWeapon(lb_Weapons.SelectedItem.ToString().Remove(lb_Weapons.SelectedItem.ToString().IndexOf(':'))), editingPlayerRoom));
+                    
+                    editingPlayer = false;
+
+                    tb_PlayerName.ReadOnly = true;
+                    nm_HP.ReadOnly = true;
+                    nm_Defence.ReadOnly = true;
+                    nm_Lvl.ReadOnly = true;
+                    nm_MaxHP.ReadOnly = true;
+                    
+                    lb_WeaponName.Visible = true;
+                    lb_WeaponDMG.Visible = true;
+                    lb_WeaponCRT.Visible = true;
+                    tb_WeaponName.Visible = true;
+                    nm_WeaponDMG.Visible = true;
+                    nm_WeaponCrit.Visible = true;
+
+                    lb_ChooseWeapon.Visible = false;
+                    lb_Weapons.Visible = false;
+
+                    bt_EditPlayer.Text = "Edit selected player";
+                    bt_Continue.Visible = true;
+                    bt_AddNewPlayer.Visible = true;
+                    bt_Cancel.Visible = false;
+                    bt_DeletePlayer.Visible = true;
+                    updateList();
+                    updateStats(DC.getPlayer(lb_Players.SelectedItem.ToString()));
+                }
+            }
+            else
+            {
+                editingPlayer = true;
+                Player p = DC.getPlayer(lb_Players.SelectedItem.ToString());
+                editingPlayerRoom = p.RoomID;
+
+                bt_EditPlayer.Text = "Confirm";
+                bt_AddNewPlayer.Visible = false;
+                bt_Continue.Visible = false;
+                bt_Cancel.Visible = true;
+                bt_DeletePlayer.Visible = false;
+
+                tb_PlayerName.Text = p.Name;
+                tb_PlayerName.ReadOnly = true;
+                nm_HP.Value = p.HP;
+                nm_HP.ReadOnly = false;
+                nm_MaxHP.Value = p.MaxHP;
+                nm_MaxHP.ReadOnly = false;
+                nm_Lvl.Value = p.Level;
+                nm_Lvl.ReadOnly = false;
+                nm_Defence.Value = p.Defence;
+                nm_Defence.ReadOnly = false;
+
+                lb_WeaponName.Visible = false;
+                lb_WeaponDMG.Visible = false;
+                lb_WeaponCRT.Visible = false;
+                tb_WeaponName.Visible = false;
+                nm_WeaponDMG.Visible = false;
+                nm_WeaponCrit.Visible = false;
+
+                lb_ChooseWeapon.Visible = true;
+                lb_Weapons.Visible = true;
+                lb_Weapons.Items.Clear();
+                List<Weapon> weaponList = DC.getAllWeapons();
+                foreach (Weapon w in weaponList)
+                {
+                    lb_Weapons.Items.Add(w.WeaponName+": "+w.WeaponType+": "+ Convert.ToString(w.WeaponDMG)+" ~ "+Convert.ToString(w.WeaponCrt+"%"));
+                }
+            }
+        }
+
+        private void lb_Players_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            updateStats(DC.getPlayer(lb_Players.SelectedItem.ToString()));
+        }
+
+        private void bt_Cancel_Click(object sender, EventArgs e)
+        {
+            bt_AddNewPlayer.Text = "New player";
+            bt_EditPlayer.Text = "Edit selected player";
+
+            bt_Cancel.Visible = false;
+            bt_Continue.Visible = true;
+            bt_EditPlayer.Visible = true;
+            bt_AddNewPlayer.Visible = true;
+            bt_DeletePlayer.Visible = true;
+
+            if (makingNewPlayer)
+            {
+                makingNewPlayer = false;
+
+                tb_PlayerName.ReadOnly = true;
+                nm_HP.ReadOnly = true;
+                nm_Defence.ReadOnly = true;
+                nm_Lvl.ReadOnly = true;
+                nm_MaxHP.ReadOnly = true;
+
+
+                lb_WeaponName.Visible = true;
+                lb_WeaponDMG.Visible = true;
+                lb_WeaponCRT.Visible = true;
+                tb_WeaponName.Visible = true;
+                nm_WeaponDMG.Visible = true;
+                nm_WeaponCrit.Visible = true;
+                
+                updateList();
+                updateStats(DC.getPlayer(lb_Players.SelectedItem.ToString()));
+            }
+
+            if (editingPlayer)
+            {
+                editingPlayer = false;
+
+                tb_PlayerName.ReadOnly = true;
+                nm_HP.ReadOnly = true;
+                nm_Defence.ReadOnly = true;
+                nm_Lvl.ReadOnly = true;
+                nm_MaxHP.ReadOnly = true;
+
+                lb_WeaponName.Visible = true;
+                lb_WeaponDMG.Visible = true;
+                lb_WeaponCRT.Visible = true;
+                tb_WeaponName.Visible = true;
+                nm_WeaponDMG.Visible = true;
+                nm_WeaponCrit.Visible = true;
+
+                lb_ChooseWeapon.Visible = false;
+                lb_Weapons.Visible = false;
+                
+                updateList();
+                updateStats(DC.getPlayer(lb_Players.SelectedItem.ToString()));
+            }
+        }
+
+        private void bt_DeletePlayer_Click(object sender, EventArgs e)
+        {
+            
         }
     }
 }

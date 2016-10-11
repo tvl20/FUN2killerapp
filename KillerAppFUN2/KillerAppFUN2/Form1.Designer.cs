@@ -47,7 +47,12 @@
             this.nm_HP = new System.Windows.Forms.NumericUpDown();
             this.label9 = new System.Windows.Forms.Label();
             this.nm_MaxHP = new System.Windows.Forms.NumericUpDown();
-            this.button1 = new System.Windows.Forms.Button();
+            this.bt_EditPlayer = new System.Windows.Forms.Button();
+            this.bt_Continue = new System.Windows.Forms.Button();
+            this.lb_Weapons = new System.Windows.Forms.ListBox();
+            this.lb_ChooseWeapon = new System.Windows.Forms.Label();
+            this.bt_Cancel = new System.Windows.Forms.Button();
+            this.bt_DeletePlayer = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.nm_Lvl)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nm_Defence)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nm_WeaponDMG)).BeginInit();
@@ -86,6 +91,11 @@
             // nm_Lvl
             // 
             this.nm_Lvl.Location = new System.Drawing.Point(178, 216);
+            this.nm_Lvl.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
             this.nm_Lvl.Minimum = new decimal(new int[] {
             1,
             0,
@@ -109,6 +119,7 @@
             this.lb_Players.Name = "lb_Players";
             this.lb_Players.Size = new System.Drawing.Size(279, 84);
             this.lb_Players.TabIndex = 4;
+            this.lb_Players.SelectedIndexChanged += new System.EventHandler(this.lb_Players_SelectedIndexChanged);
             // 
             // label2
             // 
@@ -140,6 +151,11 @@
             // nm_Defence
             // 
             this.nm_Defence.Location = new System.Drawing.Point(178, 244);
+            this.nm_Defence.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
             this.nm_Defence.Minimum = new decimal(new int[] {
             1,
             0,
@@ -184,6 +200,11 @@
             // nm_WeaponDMG
             // 
             this.nm_WeaponDMG.Location = new System.Drawing.Point(178, 301);
+            this.nm_WeaponDMG.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
             this.nm_WeaponDMG.Minimum = new decimal(new int[] {
             1,
             0,
@@ -202,6 +223,11 @@
             // nm_WeaponCrit
             // 
             this.nm_WeaponCrit.Location = new System.Drawing.Point(178, 329);
+            this.nm_WeaponCrit.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
             this.nm_WeaponCrit.Minimum = new decimal(new int[] {
             1,
             0,
@@ -238,6 +264,11 @@
             // nm_HP
             // 
             this.nm_HP.Location = new System.Drawing.Point(178, 160);
+            this.nm_HP.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
             this.nm_HP.Minimum = new decimal(new int[] {
             1,
             0,
@@ -265,6 +296,11 @@
             // nm_MaxHP
             // 
             this.nm_MaxHP.Location = new System.Drawing.Point(178, 188);
+            this.nm_MaxHP.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
             this.nm_MaxHP.Minimum = new decimal(new int[] {
             1,
             0,
@@ -280,21 +316,77 @@
             0,
             0});
             // 
-            // button1
+            // bt_EditPlayer
             // 
-            this.button1.Location = new System.Drawing.Point(152, 370);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(139, 48);
-            this.button1.TabIndex = 19;
-            this.button1.Text = "Edit selected player";
-            this.button1.UseVisualStyleBackColor = true;
+            this.bt_EditPlayer.Location = new System.Drawing.Point(152, 370);
+            this.bt_EditPlayer.Name = "bt_EditPlayer";
+            this.bt_EditPlayer.Size = new System.Drawing.Size(139, 48);
+            this.bt_EditPlayer.TabIndex = 19;
+            this.bt_EditPlayer.Text = "Edit selected player";
+            this.bt_EditPlayer.UseVisualStyleBackColor = true;
+            this.bt_EditPlayer.Click += new System.EventHandler(this.bt_EditPlayer_Click);
+            // 
+            // bt_Continue
+            // 
+            this.bt_Continue.Location = new System.Drawing.Point(12, 424);
+            this.bt_Continue.Name = "bt_Continue";
+            this.bt_Continue.Size = new System.Drawing.Size(139, 50);
+            this.bt_Continue.TabIndex = 20;
+            this.bt_Continue.Text = "Continue";
+            this.bt_Continue.UseVisualStyleBackColor = true;
+            // 
+            // lb_Weapons
+            // 
+            this.lb_Weapons.FormattingEnabled = true;
+            this.lb_Weapons.ItemHeight = 16;
+            this.lb_Weapons.Location = new System.Drawing.Point(12, 295);
+            this.lb_Weapons.Name = "lb_Weapons";
+            this.lb_Weapons.Size = new System.Drawing.Size(279, 68);
+            this.lb_Weapons.TabIndex = 21;
+            this.lb_Weapons.Visible = false;
+            // 
+            // lb_ChooseWeapon
+            // 
+            this.lb_ChooseWeapon.AutoSize = true;
+            this.lb_ChooseWeapon.Location = new System.Drawing.Point(9, 275);
+            this.lb_ChooseWeapon.Name = "lb_ChooseWeapon";
+            this.lb_ChooseWeapon.Size = new System.Drawing.Size(113, 17);
+            this.lb_ChooseWeapon.TabIndex = 22;
+            this.lb_ChooseWeapon.Text = "Choose weapon:";
+            this.lb_ChooseWeapon.Visible = false;
+            // 
+            // bt_Cancel
+            // 
+            this.bt_Cancel.Location = new System.Drawing.Point(12, 424);
+            this.bt_Cancel.Name = "bt_Cancel";
+            this.bt_Cancel.Size = new System.Drawing.Size(279, 50);
+            this.bt_Cancel.TabIndex = 23;
+            this.bt_Cancel.Text = "Cancel";
+            this.bt_Cancel.UseVisualStyleBackColor = true;
+            this.bt_Cancel.Visible = false;
+            this.bt_Cancel.Click += new System.EventHandler(this.bt_Cancel_Click);
+            // 
+            // bt_DeletePlayer
+            // 
+            this.bt_DeletePlayer.Location = new System.Drawing.Point(152, 424);
+            this.bt_DeletePlayer.Name = "bt_DeletePlayer";
+            this.bt_DeletePlayer.Size = new System.Drawing.Size(139, 50);
+            this.bt_DeletePlayer.TabIndex = 24;
+            this.bt_DeletePlayer.Text = "Delete selected player";
+            this.bt_DeletePlayer.UseVisualStyleBackColor = true;
+            this.bt_DeletePlayer.Click += new System.EventHandler(this.bt_DeletePlayer_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(306, 432);
-            this.Controls.Add(this.button1);
+            this.ClientSize = new System.Drawing.Size(306, 486);
+            this.Controls.Add(this.bt_DeletePlayer);
+            this.Controls.Add(this.bt_Cancel);
+            this.Controls.Add(this.lb_ChooseWeapon);
+            this.Controls.Add(this.lb_Weapons);
+            this.Controls.Add(this.bt_Continue);
+            this.Controls.Add(this.bt_EditPlayer);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.nm_MaxHP);
             this.Controls.Add(this.label8);
@@ -315,7 +407,7 @@
             this.Controls.Add(this.bt_AddNewPlayer);
             this.Controls.Add(this.label1);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "Character editor";
             ((System.ComponentModel.ISupportInitialize)(this.nm_Lvl)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nm_Defence)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nm_WeaponDMG)).EndInit();
@@ -348,7 +440,12 @@
         private System.Windows.Forms.NumericUpDown nm_HP;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.NumericUpDown nm_MaxHP;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button bt_EditPlayer;
+        private System.Windows.Forms.Button bt_Continue;
+        private System.Windows.Forms.ListBox lb_Weapons;
+        private System.Windows.Forms.Label lb_ChooseWeapon;
+        private System.Windows.Forms.Button bt_Cancel;
+        private System.Windows.Forms.Button bt_DeletePlayer;
     }
 }
 
