@@ -12,11 +12,16 @@ namespace KillerAppFUN2
         public Weapon Weapon;
         public string Name { get; private set; }
         public int Defence { get; set; }
-        public Player(Point location, string name, int lvl, int defence, int maxhp, int hp, Direction d, Weapon w) : base(location, d, lvl, maxhp, hp)
+        public Player(Point location, string name, int lvl, int defence, int maxhp, int hp, Direction d, Weapon w, int roomID) : base(location, d, lvl, maxhp, hp, roomID)
         {
             Name = name;
             Defence = defence;
             Weapon = w;
+        }
+
+        public override string ToString()
+        {
+            return Name;
         }
     }
 }

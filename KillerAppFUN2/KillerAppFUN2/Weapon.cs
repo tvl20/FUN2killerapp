@@ -8,9 +8,10 @@ namespace KillerAppFUN2
 {
     public class Weapon
     {
-        private int WeaponID { get; set; }
-        public int WeaponDMG { get; set; }
-        public int WeaponCrt { get; set; }
+        public int WeaponID { get; }
+        public int WeaponDMG { get; }
+        public int WeaponCrt { get; }
+        public string WeaponName { get; }
 
         public Weapon(int weaponID, int weaponDMG, int weaponCrt)
         {

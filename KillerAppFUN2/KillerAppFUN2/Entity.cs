@@ -21,14 +21,16 @@ namespace KillerAppFUN2
         public int HP { get; set; }
         public Direction Dir { get; set; }
         public int Level { get; set; }
+        public int RoomID { get; set; }
 
-        public Entity(Point location, Direction d, int lvl, int maxhp, int hp)
+        public Entity(Point location, Direction d, int lvl, int maxhp, int hp, int roomID)
         {
             Location = location;
             Dir = d;
             Level = lvl;
             MaxHP = maxhp;
             HP = hp;
+            RoomID = roomID;
         }
     }
 }
