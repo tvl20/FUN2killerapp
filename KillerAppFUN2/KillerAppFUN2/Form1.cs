@@ -207,6 +207,7 @@ namespace KillerAppFUN2
                     {
                         lb_Weapons.Items.Add(w.WeaponName + ": " + w.WeaponType + ": " + Convert.ToString(w.WeaponDMG) + " ~ " + Convert.ToString(w.WeaponCrt + "%"));
                     }
+                    lb_Weapons.SelectedIndex = 0;
                 }
             }
         }
