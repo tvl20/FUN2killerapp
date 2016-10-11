@@ -26,7 +26,11 @@ namespace KillerAppFUN2
             {
                 lb_Players.Items.Add(name);
             }
-            lb_Players.SelectedIndex = 0;
+
+            if (lb_Players.Items.Count > 0)
+            {
+                lb_Players.SelectedIndex = 0;
+            }
         }
 
         private void updateStats(Player p)
@@ -55,7 +59,7 @@ namespace KillerAppFUN2
                 {
                     MessageBox.Show("Current HP can't be higher then max HP.");
                 }
-                else if (tb_PlayerName.Text.Length < 3)
+                else if (tb_PlayerName.Text.Length < 4)
                 {
                     MessageBox.Show("Name must be at least 4 characters long");
                 }
@@ -125,81 +129,84 @@ namespace KillerAppFUN2
 
         private void bt_EditPlayer_Click(object sender, EventArgs e)
         {
-            if (editingPlayer)
+            if (lb_Players.Items.Count > 0)
             {
-                if (nm_HP.Value > nm_MaxHP.Value)
+                if (editingPlayer)
                 {
-                    MessageBox.Show("Current HP can't be higher then max HP.");
+                    if (nm_HP.Value > nm_MaxHP.Value)
+                    {
+                        MessageBox.Show("Current HP can't be higher then max HP.");
+                    }
+                    else
+                    {
+                        DC.updatePlayer(new Player(new Point(0, 0), tb_PlayerName.Text, Convert.ToInt32(nm_Lvl.Value), Convert.ToInt32(nm_Defence.Value),
+                            Convert.ToInt32(nm_MaxHP.Value), Convert.ToInt32(nm_HP.Value), Entity.Direction.South, DC.getWeapon(lb_Weapons.SelectedItem.ToString().Remove(lb_Weapons.SelectedItem.ToString().IndexOf(':'))), editingPlayerRoom));
+
+                        editingPlayer = false;
+
+                        tb_PlayerName.ReadOnly = true;
+                        nm_HP.ReadOnly = true;
+                        nm_Defence.ReadOnly = true;
+                        nm_Lvl.ReadOnly = true;
+                        nm_MaxHP.ReadOnly = true;
+
+                        lb_WeaponName.Visible = true;
+                        lb_WeaponDMG.Visible = true;
+                        lb_WeaponCRT.Visible = true;
+                        tb_WeaponName.Visible = true;
+                        nm_WeaponDMG.Visible = true;
+                        nm_WeaponCrit.Visible = true;
+
+                        lb_ChooseWeapon.Visible = false;
+                        lb_Weapons.Visible = false;
+
+                        bt_EditPlayer.Text = "Edit selected player";
+                        bt_Continue.Visible = true;
+                        bt_AddNewPlayer.Visible = true;
+                        bt_Cancel.Visible = false;
+                        bt_DeletePlayer.Visible = true;
+                        updateList();
+                        updateStats(DC.getPlayer(lb_Players.SelectedItem.ToString()));
+                    }
                 }
                 else
                 {
-                    DC.updatePlayer(new Player(new Point(0, 0), tb_PlayerName.Text, Convert.ToInt32(nm_Lvl.Value), Convert.ToInt32(nm_Defence.Value),
-                        Convert.ToInt32(nm_MaxHP.Value), Convert.ToInt32(nm_HP.Value), Entity.Direction.South, DC.getWeapon(lb_Weapons.SelectedItem.ToString().Remove(lb_Weapons.SelectedItem.ToString().IndexOf(':'))), editingPlayerRoom));
-                    
-                    editingPlayer = false;
+                    editingPlayer = true;
+                    Player p = DC.getPlayer(lb_Players.SelectedItem.ToString());
+                    editingPlayerRoom = p.RoomID;
 
+                    bt_EditPlayer.Text = "Confirm";
+                    bt_AddNewPlayer.Visible = false;
+                    bt_Continue.Visible = false;
+                    bt_Cancel.Visible = true;
+                    bt_DeletePlayer.Visible = false;
+
+                    tb_PlayerName.Text = p.Name;
                     tb_PlayerName.ReadOnly = true;
-                    nm_HP.ReadOnly = true;
-                    nm_Defence.ReadOnly = true;
-                    nm_Lvl.ReadOnly = true;
-                    nm_MaxHP.ReadOnly = true;
-                    
-                    lb_WeaponName.Visible = true;
-                    lb_WeaponDMG.Visible = true;
-                    lb_WeaponCRT.Visible = true;
-                    tb_WeaponName.Visible = true;
-                    nm_WeaponDMG.Visible = true;
-                    nm_WeaponCrit.Visible = true;
+                    nm_HP.Value = p.HP;
+                    nm_HP.ReadOnly = false;
+                    nm_MaxHP.Value = p.MaxHP;
+                    nm_MaxHP.ReadOnly = false;
+                    nm_Lvl.Value = p.Level;
+                    nm_Lvl.ReadOnly = false;
+                    nm_Defence.Value = p.Defence;
+                    nm_Defence.ReadOnly = false;
 
-                    lb_ChooseWeapon.Visible = false;
-                    lb_Weapons.Visible = false;
+                    lb_WeaponName.Visible = false;
+                    lb_WeaponDMG.Visible = false;
+                    lb_WeaponCRT.Visible = false;
+                    tb_WeaponName.Visible = false;
+                    nm_WeaponDMG.Visible = false;
+                    nm_WeaponCrit.Visible = false;
 
-                    bt_EditPlayer.Text = "Edit selected player";
-                    bt_Continue.Visible = true;
-                    bt_AddNewPlayer.Visible = true;
-                    bt_Cancel.Visible = false;
-                    bt_DeletePlayer.Visible = true;
-                    updateList();
-                    updateStats(DC.getPlayer(lb_Players.SelectedItem.ToString()));
-                }
-            }
-            else
-            {
-                editingPlayer = true;
-                Player p = DC.getPlayer(lb_Players.SelectedItem.ToString());
-                editingPlayerRoom = p.RoomID;
-
-                bt_EditPlayer.Text = "Confirm";
-                bt_AddNewPlayer.Visible = false;
-                bt_Continue.Visible = false;
-                bt_Cancel.Visible = true;
-                bt_DeletePlayer.Visible = false;
-
-                tb_PlayerName.Text = p.Name;
-                tb_PlayerName.ReadOnly = true;
-                nm_HP.Value = p.HP;
-                nm_HP.ReadOnly = false;
-                nm_MaxHP.Value = p.MaxHP;
-                nm_MaxHP.ReadOnly = false;
-                nm_Lvl.Value = p.Level;
-                nm_Lvl.ReadOnly = false;
-                nm_Defence.Value = p.Defence;
-                nm_Defence.ReadOnly = false;
-
-                lb_WeaponName.Visible = false;
-                lb_WeaponDMG.Visible = false;
-                lb_WeaponCRT.Visible = false;
-                tb_WeaponName.Visible = false;
-                nm_WeaponDMG.Visible = false;
-                nm_WeaponCrit.Visible = false;
-
-                lb_ChooseWeapon.Visible = true;
-                lb_Weapons.Visible = true;
-                lb_Weapons.Items.Clear();
-                List<Weapon> weaponList = DC.getAllWeapons();
-                foreach (Weapon w in weaponList)
-                {
-                    lb_Weapons.Items.Add(w.WeaponName+": "+w.WeaponType+": "+ Convert.ToString(w.WeaponDMG)+" ~ "+Convert.ToString(w.WeaponCrt+"%"));
+                    lb_ChooseWeapon.Visible = true;
+                    lb_Weapons.Visible = true;
+                    lb_Weapons.Items.Clear();
+                    List<Weapon> weaponList = DC.getAllWeapons();
+                    foreach (Weapon w in weaponList)
+                    {
+                        lb_Weapons.Items.Add(w.WeaponName + ": " + w.WeaponType + ": " + Convert.ToString(w.WeaponDMG) + " ~ " + Convert.ToString(w.WeaponCrt + "%"));
+                    }
                 }
             }
         }
@@ -269,8 +276,11 @@ namespace KillerAppFUN2
 
         private void bt_DeletePlayer_Click(object sender, EventArgs e)
         {
-            DC.deletePlayer(lb_Players.SelectedItem.ToString());
-            updateList();
+            if (lb_Players.Items.Count > 0)
+            {
+                DC.deletePlayer(lb_Players.SelectedItem.ToString());
+                updateList();
+            }
         }
     }
 }
