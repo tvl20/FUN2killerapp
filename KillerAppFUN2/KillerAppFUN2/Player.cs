@@ -12,11 +12,11 @@ namespace KillerAppFUN2
         public Weapon Weapon;
         public string Name { get; private set; }
         public int Defence { get; set; }
-        public Player(Point location, string name, int lvl, int defence, int x, int y, int maxhp, int hp, Direction d) : base(location, d, lvl, maxhp, hp)
+        public Player(Point location, string name, int lvl, int defence, int maxhp, int hp, Direction d, Weapon w) : base(location, d, lvl, maxhp, hp)
         {
             Name = name;
             Defence = defence;
-            Location = new Point(x, y);
+            Weapon = w;
         }
     }
 }
