@@ -61,10 +61,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DAL\DataBaseControl.cs" />
-    <Compile Include="DAL\IPlayerContext.cs" />
-    <Compile Include="DAL\PlayerLocalDatabaseContext.cs" />
-    <Compile Include="DAL\PlayerRepository.cs" />
+    <Compile Include="DAL\IPlayerRepo.cs" />
+    <Compile Include="DAL\IWeaponRepo.cs" />
+    <Compile Include="DAL\MSSQLplayerRepo.cs" />
+    <Compile Include="DAL\MSSQLweaponRepo.cs" />
+    <Compile Include="DAL\PlayerBizLog.cs" />
+    <Compile Include="DAL\WeaponBizLog.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>

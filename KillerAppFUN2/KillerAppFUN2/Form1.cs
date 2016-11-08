@@ -16,12 +16,13 @@ namespace KillerAppFUN2
         private bool makingNewPlayer = false;
         private bool editingPlayer = false;
         private int editingPlayerRoom;
-        private DataBaseControl DC = new DataBaseControl();
+        private PlayerBizLog playerLog = new PlayerBizLog(new MSSQLplayerRepo());
+        private WeaponBizLog weaponLog = new WeaponBizLog(new MSSQLweaponRepo());
 
         private void updateList()
         {
             lb_Players.Items.Clear();
-            List<string> names = DC.getPlayerNames();
+            List<string> names = playerLog.getPlayerNames();
             foreach (string name in names)
             {
                 lb_Players.Items.Add(name);
@@ -48,7 +49,7 @@ namespace KillerAppFUN2
         {
             InitializeComponent();
             updateList();
-            updateStats(DC.getPlayer(lb_Players.SelectedItem.ToString()));
+            updateStats(playerLog.getPlayer(lb_Players.SelectedItem.ToString()));
         }
 
         private void bt_AddNewPlayer_Click(object sender, EventArgs e)
@@ -63,15 +64,15 @@ namespace KillerAppFUN2
                 {
                     MessageBox.Show("Name must be at least 4 characters long");
                 }
-                else if (DC.playerNameTaken(tb_PlayerName.Text) == true)
+                else if (playerLog.playerNameTaken(tb_PlayerName.Text) == true)
                 {
                     MessageBox.Show("Name is already taken.");
                 }
                 else
                 {
                     //seperated so its easier to read
-                    DC.addPlayer(new Player(new Point(0, 0), tb_PlayerName.Text, Convert.ToInt32(nm_Lvl.Value), Convert.ToInt32(nm_Defence.Value), 
-                        Convert.ToInt32(nm_MaxHP.Value), Convert.ToInt32(nm_HP.Value), Entity.Direction.South, DC.getWeapon("Broken Blade"), 2));
+                    playerLog.addPlayer(new Player(new Point(0, 0), tb_PlayerName.Text, Convert.ToInt32(nm_Lvl.Value), Convert.ToInt32(nm_Defence.Value), 
+                        Convert.ToInt32(nm_MaxHP.Value), Convert.ToInt32(nm_HP.Value), Entity.Direction.South, weaponLog.getWeapon("Broken Blade"), 2));
                     
                     makingNewPlayer = false;
 
@@ -94,7 +95,7 @@ namespace KillerAppFUN2
                     bt_Cancel.Visible = false;
                     bt_DeletePlayer.Visible = true;
                     updateList();
-                    updateStats(DC.getPlayer(lb_Players.SelectedItem.ToString()));
+                    updateStats(playerLog.getPlayer(lb_Players.SelectedItem.ToString()));
                 }
             }
             else
@@ -139,8 +140,8 @@ namespace KillerAppFUN2
                     }
                     else
                     {
-                        DC.updatePlayer(new Player(new Point(0, 0), tb_PlayerName.Text, Convert.ToInt32(nm_Lvl.Value), Convert.ToInt32(nm_Defence.Value),
-                            Convert.ToInt32(nm_MaxHP.Value), Convert.ToInt32(nm_HP.Value), Entity.Direction.South, DC.getWeapon(lb_Weapons.SelectedItem.ToString().Remove(lb_Weapons.SelectedItem.ToString().IndexOf(':'))), editingPlayerRoom));
+                        playerLog.updatePlayer(new Player(new Point(0, 0), tb_PlayerName.Text, Convert.ToInt32(nm_Lvl.Value), Convert.ToInt32(nm_Defence.Value),
+                            Convert.ToInt32(nm_MaxHP.Value), Convert.ToInt32(nm_HP.Value), Entity.Direction.South, weaponLog.getWeapon(lb_Weapons.SelectedItem.ToString().Remove(lb_Weapons.SelectedItem.ToString().IndexOf(':'))), editingPlayerRoom));
 
                         editingPlayer = false;
 
@@ -166,13 +167,13 @@ namespace KillerAppFUN2
                         bt_Cancel.Visible = false;
                         bt_DeletePlayer.Visible = true;
                         updateList();
-                        updateStats(DC.getPlayer(lb_Players.SelectedItem.ToString()));
+                        updateStats(playerLog.getPlayer(lb_Players.SelectedItem.ToString()));
                     }
                 }
                 else
                 {
                     editingPlayer = true;
-                    Player p = DC.getPlayer(lb_Players.SelectedItem.ToString());
+                    Player p = playerLog.getPlayer(lb_Players.SelectedItem.ToString());
                     editingPlayerRoom = p.RoomID;
 
                     bt_EditPlayer.Text = "Confirm";
@@ -202,7 +203,7 @@ namespace KillerAppFUN2
                     lb_ChooseWeapon.Visible = true;
                     lb_Weapons.Visible = true;
                     lb_Weapons.Items.Clear();
-                    List<Weapon> weaponList = DC.getAllWeapons();
+                    List<Weapon> weaponList = weaponLog.getAllWeapons();
                     foreach (Weapon w in weaponList)
                     {
                         lb_Weapons.Items.Add(w.WeaponName + ": " + w.WeaponType + ": " + Convert.ToString(w.WeaponDMG) + " ~ " + Convert.ToString(w.WeaponCrt + "%"));
@@ -214,7 +215,7 @@ namespace KillerAppFUN2
 
         private void lb_Players_SelectedIndexChanged(object sender, EventArgs e)
         {
-            updateStats(DC.getPlayer(lb_Players.SelectedItem.ToString()));
+            updateStats(playerLog.getPlayer(lb_Players.SelectedItem.ToString()));
         }
 
         private void bt_Cancel_Click(object sender, EventArgs e)
@@ -247,7 +248,7 @@ namespace KillerAppFUN2
                 nm_WeaponCrit.Visible = true;
                 
                 updateList();
-                updateStats(DC.getPlayer(lb_Players.SelectedItem.ToString()));
+                updateStats(playerLog.getPlayer(lb_Players.SelectedItem.ToString()));
             }
 
             if (editingPlayer)
@@ -271,7 +272,7 @@ namespace KillerAppFUN2
                 lb_Weapons.Visible = false;
                 
                 updateList();
-                updateStats(DC.getPlayer(lb_Players.SelectedItem.ToString()));
+                updateStats(playerLog.getPlayer(lb_Players.SelectedItem.ToString()));
             }
         }
 
@@ -279,7 +280,7 @@ namespace KillerAppFUN2
         {
             if (lb_Players.Items.Count > 0)
             {
-                DC.deletePlayer(lb_Players.SelectedItem.ToString());
+                playerLog.deletePlayer(lb_Players.SelectedItem.ToString());
                 updateList();
             }
         }

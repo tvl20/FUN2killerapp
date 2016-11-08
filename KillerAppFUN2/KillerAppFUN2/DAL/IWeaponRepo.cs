@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace KillerAppFUN2.DAL
 {
-    class PlayerRepository
+    interface IWeaponRepo
     {
+        List<Weapon> getAllWeapons();
+        Weapon getWeapon(string name);
     }
 }
